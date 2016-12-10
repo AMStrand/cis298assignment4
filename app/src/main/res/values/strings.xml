@@ -15,4 +15,23 @@
     <string name="beverage_pack_hint">Item Pack</string>
     <string name="beverage_price_hint">Item Price</string>
 
+    <string name="select_contact_text">Select Contact</string>
+    <string name="send_email_text">Send Email</string>
+
+    <string name="send_email_subject">Beverage App Item Information</string>
+
+    <string name="beverage_active_yes">Currently active</string>
+    <string name="beverage_active_no">Currently inactive</string>
+
+    <string name="beverage_report">%1$s,
+
+    Please review the following beverage:
+
+    %2$s
+    %3$s
+    %4$s
+    %5$f
+    %6$s</string>
+    <string name="send_report">Send beverage report via</string>
+
 </resources>

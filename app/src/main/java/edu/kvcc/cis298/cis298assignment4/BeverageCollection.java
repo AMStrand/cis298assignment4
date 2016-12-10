@@ -48,6 +48,11 @@ public class BeverageCollection {
         return mBeverages;
     }
 
+        // Setter for the beverage list for loading the list:
+    public void setBeverages(List<Beverage> beverages) {
+        mBeverages = beverages;
+    }
+
     public Beverage getBeverage(String Id) {
         for (Beverage beverage : mBeverages) {
             if (beverage.getId().equals(Id)) {

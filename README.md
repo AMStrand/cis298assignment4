@@ -2,7 +2,7 @@
 ## Due 12-12-2016
 ## Author
 
-
+Alyssa Strand
 
 ## Description
 
@@ -86,11 +86,11 @@ The application must do all of the above work to get the extra credit. In order 
 
 ## Outside Resources Used
 
-
+To figure out how to pull email info from contact: http://stackoverflow.com/questions/10117049/get-only-email-address-from-contact-list-android
 
 ## Known Problems, Issues, And/Or Errors in the Program
 
-
+None.
 
 # Original Assignment README
 

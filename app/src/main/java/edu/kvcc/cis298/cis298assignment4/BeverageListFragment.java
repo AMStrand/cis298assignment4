@@ -1,6 +1,7 @@
 package edu.kvcc.cis298.cis298assignment4;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,13 @@ public class BeverageListFragment extends Fragment {
     //Private variables for the recycler view and the required adapter
     private RecyclerView mBeverageRecyclerView;
     private BeverageAdapter mBeverageAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+            // Fetch the beverage list from the url source:
+        new fetchBeveragesTask().execute();
+    }
 
     @Nullable
     @Override
@@ -59,12 +67,24 @@ public class BeverageListFragment extends Fragment {
 
         //If there is no adapter, make a new one and send it in the list of beverages
         if (mBeverageAdapter == null) {
-            mBeverageAdapter = new BeverageAdapter(beverages);
-            //set the adapter for the recyclerview to the newly created adapter
-            mBeverageRecyclerView.setAdapter(mBeverageAdapter);
+                // Set up the adapter:
+            setupAdapter();
         } else {
             //adapter already exists, so just call the notify data set changed method to update
             mBeverageAdapter.notifyDataSetChanged();
+        }
+    }
+
+        // Private method to set up the adapter for the recycler view:
+    private void setupAdapter() {
+            // If it has been added:
+        if (isAdded()) {
+                // Get the beverage collection:
+            BeverageCollection collection = BeverageCollection.get(getActivity());
+                // Make the beverage adapter of the collection of beverages:
+            mBeverageAdapter = new BeverageAdapter(collection.getBeverages());
+                // Set the adapter:
+            mBeverageRecyclerView.setAdapter(mBeverageAdapter);
         }
     }
 
@@ -151,4 +171,41 @@ public class BeverageListFragment extends Fragment {
             return mBeverages.size();
         }
     }
+
+        // Private class to fetch the beverages:
+    private class fetchBeveragesTask extends AsyncTask<Void, Void, List<Beverage>> {
+            // In the background, fetch the crimes using the BeverageFetcher class methods:
+        @Override
+        protected List<Beverage> doInBackground(Void... voids) {
+            return new BeverageFetcher().fetchBeverages();
+        }
+            // After executing the above...
+        @Override
+        protected void onPostExecute(List<Beverage> beverages) {
+                // Get an instance of the beverage collection:
+            BeverageCollection collection = BeverageCollection.get(getActivity());
+                // Set the beverages to those fetched:
+            collection.setBeverages(beverages);
+                // Set up the adapter for the recycler view:
+            setupAdapter();
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
