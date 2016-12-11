@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,8 @@ import android.widget.EditText;
  * Created by David Barnes on 11/3/2015.
  */
 public class BeverageFragment extends Fragment {
-
+    // Variable for logging:
+    private static final String TAG = "BeverageFragment";
     //String key that will be used to send data between fragments
     private static final String ARG_BEVERAGE_ID = "crime_id";
 
@@ -194,7 +196,7 @@ public class BeverageFragment extends Fragment {
             mContactButton.setEnabled(false);
             contactsBool = false;
         } else {
-                // Otherwise set the bool to true so email can still be sent:
+                // Otherwise set the bool to true:
             contactsBool = true;
         }
 
@@ -203,23 +205,32 @@ public class BeverageFragment extends Fragment {
         mEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-                emailIntent.setType("text/plain");
-
+                    // Create a new intent for the email intent:
+                Intent emailIntent;
+                    // If the contact email is null, do a normal action_send:
+                if (contactEmail == null) {
+                        // Make the intent ACTION_SEND:
+                    emailIntent = new Intent(Intent.ACTION_SEND);
+                        // Set the type to plain text:
+                    emailIntent.setType("text/plain");
+                } else {
+                        // If there is a contact, make the intent ACTION_SENDTO:
+                    emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + contactEmail));
+                }
+                    // Set the extras with the beverage report and subject:
                 emailIntent.putExtra(Intent.EXTRA_TEXT, getBeverageReport());
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.send_email_subject));
-
+                    // Create a chooser to choose which email app to use:
                 emailIntent = Intent.createChooser(emailIntent, getString(R.string.send_report));
-
+                    // Start the activity using the email intent:
                 startActivity(emailIntent);
+
             }
         });
 
             // If there is no email for the selected contact but they can still
             // choose a contact (have default app), the send email button is disabled:
-        if (contactEmail == "" && !contactsBool) {
+        if (contactsBool) {
             mEmailButton.setEnabled(false);
         }
 
@@ -232,31 +243,35 @@ public class BeverageFragment extends Fragment {
             // If the result is not RESULT_OK, just return:
         if (resultCode != Activity.RESULT_OK) {
             return;
-        }
-            // Set the query fields in a string array:
-        String[] queryFields = new String[] {
-                ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Email.DATA
-        };
+        } else
 
+            // This is causing a lot of problems.  Logging throughout to track errors.
             // If the request code is for the contact button...
         if (requestCode == REQUEST_CONTACT && data != null) {
                 // Save the data:
             Uri contactUri = data.getData();
+            Log.i(TAG, "Got a contactURI");
+                // Set the query fields in a string array:
+            String[] queryFields = new String[] {
+                    ContactsContract.Contacts.DISPLAY_NAME,
+                    ContactsContract.CommonDataKinds.Email.DATA
+            };
+            Log.i(TAG, "Got queryFields");
                 // Set a cursor using the data:
-            Cursor c = getActivity().getContentResolver()
-                    .query(contactUri, queryFields, null, null, null);
+            Cursor c = getActivity().getContentResolver().query(contactUri, queryFields, null, null, null);
+            Log.i(TAG, "Got cursor set up");
                 // Enter a try/catch in case of errors:
             try {
+                Log.i(TAG, "Enter try statement");
                     // If there is nothing in the cursor, just return:
                 if (c.getCount() == 0) {
                     return;
                 }
-                    // Move the cursor to the first:
                 c.moveToFirst();
-                    // Save the contact name and email:
-                contactName = c.getString(0);
-                contactEmail = c.getString(1);
+                contactName = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                contactEmail = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                    // Enable the email button:
+                mEmailButton.setEnabled(true);
             } finally {
                     // Close the cursor:
                 c.close();

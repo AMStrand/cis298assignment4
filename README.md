@@ -87,10 +87,18 @@ The application must do all of the above work to get the extra credit. In order 
 ## Outside Resources Used
 
 To figure out how to pull email info from contact: http://stackoverflow.com/questions/10117049/get-only-email-address-from-contact-list-android
+To send email to a specific email address:
+http://stackoverflow.com/questions/8701634/send-email-intent
+Issue with Instant Run feature:
+http://stackoverflow.com/questions/39591531/unsupported-method-androidproject-getplugingeneration-while-running-project
+Java string new line character:
+http://stackoverflow.com/questions/7833689/java-string-new-line
+Java string currency formatting:
+https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=java%20string%20currency%20format%20%251%24f%20decimal%20places
 
 ## Known Problems, Issues, And/Or Errors in the Program
 
-None.
+Consistent issues with trying to set the email from the chosen contact.  I have scoured the internet and cannot find a solution.  I've changed my code so many times and can't find an issue.  Maybe it has to do with the contacts app itself.  Hopefully it works for you as I'm getting nowhere right now.
 
 # Original Assignment README
 

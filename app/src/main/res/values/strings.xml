@@ -24,14 +24,8 @@
     <string name="beverage_active_no">Currently inactive</string>
 
     <string name="beverage_report">%1$s,
-
-    Please review the following beverage:
-
-    %2$s
-    %3$s
-    %4$s
-    %5$f
-    %6$s</string>
+        \n\nPlease review the following beverage:
+        \n\n%2$s \n%3$s \n%4$s \n%5$.2f \n%6$s</string>
     <string name="send_report">Send beverage report via</string>
 
 </resources>
